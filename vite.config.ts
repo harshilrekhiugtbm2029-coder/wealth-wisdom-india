@@ -23,7 +23,7 @@ export default defineConfig({
     port: 3000,
     strictPort: false,
     host: true,
-    allowedHosts: ["localhost", "127.0.0.1"],
+    allowedHosts: ["localhost", "127.0.0.1", "3000-i1yqzknwfa05cahmtx60h-e8da1d3a.sg2.manus.computer"],
     fs: {
       strict: true,
       deny: ["**/.*"],
