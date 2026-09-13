@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowUpRight, ChevronRight, Menu, MoveUpRight, Play, Search, TrendingUp, X } from "lucide-react";
 
 type Listing = { name: string; type: string; sector: string; price: string; move: string; status: string };
@@ -11,11 +11,29 @@ const listings: Listing[] = [
   { name: "ESOP Liquidity Desk", type: "ESOPs", sector: "Secondary transactions", price: "On request", move: "—", status: "Talk to our team" },
 ];
 const tabs = ["All listings", "Pre-IPO", "Unlisted", "ESOPs"];
+const sectors = ["All sectors", ...Array.from(new Set(listings.map((listing) => listing.sector)))];
 
 export default function Home() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("All listings");
-  const filtered = active === "All listings" ? listings : listings.filter((listing) => listing.type === active);
+  const [query, setQuery] = useState("");
+  const [sector, setSector] = useState("All sectors");
+  const [sort, setSort] = useState("featured");
+  const filtered = useMemo(() => {
+    const next = listings.filter((listing) => {
+      const matchesTab = active === "All listings" || listing.type === active;
+      const matchesSector = sector === "All sectors" || listing.sector === sector;
+      const haystack = `${listing.name} ${listing.type} ${listing.sector}`.toLowerCase();
+      return matchesTab && matchesSector && haystack.includes(query.toLowerCase().trim());
+    });
+    return [...next].sort((a, b) => {
+      if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "price") return Number(b.price.replace(/[^0-9]/g, "")) - Number(a.price.replace(/[^0-9]/g, ""));
+      return listings.indexOf(a) - listings.indexOf(b);
+    });
+  }, [active, query, sector, sort]);
+
+  const resetLookup = () => { setActive("All listings"); setQuery(""); setSector("All sectors"); setSort("featured"); };
 
   return (
     <div className="ww-page">
@@ -40,7 +58,7 @@ export default function Home() {
 
         <section className="access-section" id="access"><div className="section-wrap"><div className="section-kicker pale"><span>02</span> OUR SERVICES</div><div className="access-head"><h2>Access the<br /><em>private market.</em></h2><p>One experienced partner for buying, selling, research and liquidity across India's unlisted market.</p></div><div className="access-cards"><a className="access-card card-lime" href="#market"><div className="card-code">01 / BUY</div><Search size={24} /><h3>Pre-IPO shares</h3><p>Explore companies preparing for a future public listing.</p><span className="card-link">View opportunities <ChevronRight size={16} /></span></a><a className="access-card card-blue" href="#market"><div className="card-code">02 / BUY &amp; SELL</div><div className="card-graph"><span /><span /><span /><span /><span /><span /></div><h3>Unlisted shares</h3><p>Buy or sell shares in private companies across sectors.</p><span className="card-link">Browse listings <ChevronRight size={16} /></span></a><a className="access-card card-cream" href="mailto:care@wwipl.com"><div className="card-code">03 / LIQUIDITY</div><div className="orbit-small" /><h3>ESOPs &amp; exits</h3><p>Get help with ESOP transactions and secondary liquidity.</p><span className="card-link">Talk to our team <ChevronRight size={16} /></span></a></div></div></section>
 
-        <section className="market-section" id="market"><div className="section-wrap"><div className="section-kicker"><span>03</span> LIVE LISTINGS DIRECTORY</div><div className="market-title-row"><div><h2>Browse current<br /><em>opportunities.</em></h2><p>Use the filters to explore selected pre-IPO, unlisted and ESOP opportunities. Prices are indicative and subject to availability.</p></div><a className="arrow-link" href="https://wwipl.com/unlisted-share" target="_blank" rel="noreferrer">Open full WWIPL directory <ArrowUpRight size={16} /></a></div><div className="market-tabs" role="tablist" aria-label="Listing categories">{tabs.map(tab => <button role="tab" aria-selected={active === tab} className={active === tab ? "active" : ""} onClick={() => setActive(tab)} key={tab}>{tab}</button>)}</div><div className="market-list"><div className="market-list-head"><span>Company / opportunity</span><span>Type</span><span>Sector</span><span>Indicative price</span><span>Signal</span></div>{filtered.map((row, index) => <div className="market-list-row" key={row.name}><span className="company-name"><b>0{index + 1}</b>{row.name}</span><span className="type-chip">{row.type}</span><span>{row.sector}</span><span>{row.price}</span><span className={row.move.includes("−") ? "down" : row.move === "—" ? "neutral" : "up"}>{row.move}<small>{row.status}</small></span><MoveUpRight size={16} /></div>)}</div><p className="market-disclaimer">Indicative prices only. Unlisted and pre-IPO investments are higher-risk, less liquid and may not be suitable for every investor.</p></div></section>
+        <section className="market-section" id="market"><div className="section-wrap"><div className="section-kicker"><span>03</span> LIVE LISTINGS DIRECTORY</div><div className="market-title-row"><div><h2>Browse current<br /><em>opportunities.</em></h2><p>Search and filter selected pre-IPO, unlisted and ESOP opportunities. Prices are indicative and subject to availability.</p></div><a className="arrow-link" href="https://wwipl.com/unlisted-share" target="_blank" rel="noreferrer">Open full WWIPL directory <ArrowUpRight size={16} /></a></div><div className="lookup-toolbar"><label className="lookup-search"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search company, type or sector" aria-label="Search listings" /></label><label><span>Sector</span><select value={sector} onChange={(event) => setSector(event.target.value)}>{sectors.map((item) => <option key={item}>{item}</option>)}</select></label><label><span>Sort by</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="featured">Featured</option><option value="name">Company name</option><option value="price">Indicative price</option></select></label><button className="clear-lookup" onClick={resetLookup}>Clear</button></div><div className="market-tabs" role="tablist" aria-label="Listing categories">{tabs.map(tab => <button role="tab" aria-selected={active === tab} className={active === tab ? "active" : ""} onClick={() => setActive(tab)} key={tab}>{tab}</button>)}</div><div className="lookup-summary"><strong>{filtered.length}</strong> {filtered.length === 1 ? "opportunity" : "opportunities"} shown <span>Updated for demonstration · connect live WWIPL data for production</span></div><div className="market-list"><div className="market-list-head"><span>Company / opportunity</span><span>Type</span><span>Sector</span><span>Indicative price</span><span>Signal</span></div>{filtered.length > 0 ? filtered.map((row, index) => <div className="market-list-row" key={row.name}><span className="company-name"><b>{String(index + 1).padStart(2, "0")}</b>{row.name}</span><span className="type-chip">{row.type}</span><span>{row.sector}</span><span>{row.price}</span><span className={row.move.includes("−") ? "down" : row.move === "—" ? "neutral" : "up"}>{row.move}<small>{row.status}</small></span><a href={`mailto:care@wwipl.com?subject=Enquiry about ${row.name}`} aria-label={`Enquire about ${row.name}`}><MoveUpRight size={16} /></a></div>) : <div className="lookup-empty"><strong>No matching opportunities</strong><span>Try another company, category or sector.</span><button onClick={resetLookup}>Reset lookup</button></div>}</div><p className="market-disclaimer">Indicative prices only. Unlisted and pre-IPO investments are higher-risk, less liquid and may not be suitable for every investor.</p></div></section>
 
         <section className="method-section" id="method"><div className="section-wrap"><div className="section-kicker pale"><span>04</span> WHY INVESTORS USE WWIPL</div><div className="method-grid"><div><h2>From discovery<br />to <em>decision.</em></h2><p>We make the mechanics easier to understand, the information easier to access, and the next step easier to take.</p></div><div className="method-steps"><div><span>01</span><div><h3>Discover opportunities</h3><p>Search across pre-IPO, unlisted, delisted and ESOP opportunities.</p></div></div><div><span>02</span><div><h3>Understand the details</h3><p>Review company information, indicative pricing and transaction context.</p></div></div><div><span>03</span><div><h3>Speak with a specialist</h3><p>Get practical support for buying, selling, settlement and liquidity.</p></div></div></div></div></div></section>
 
