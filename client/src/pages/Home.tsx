@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <div className="ww-page" id="top">
-      <div className="top-rail"><div className="rail-inner"><span>WWIPL / PRIVATE MARKET ACCESS</span><span>UNLISTED SHARES</span><span>PRE-IPO OPPORTUNITIES</span><span>ESOP LIQUIDITY</span><span>19+ YEARS OF MARKET EXPERIENCE</span><span>WWIPL / PRIVATE MARKET ACCESS</span></div></div>
+      <div className="top-rail" aria-label="WWIPL market services"><div className="rail-inner"><div className="rail-set"><span>WWIPL / PRIVATE MARKET ACCESS</span><span>UNLISTED SHARES</span><span>PRE-IPO OPPORTUNITIES</span><span>ESOP LIQUIDITY</span><span>19+ YEARS OF MARKET EXPERIENCE</span></div><div className="rail-set" aria-hidden="true"><span>WWIPL / PRIVATE MARKET ACCESS</span><span>UNLISTED SHARES</span><span>PRE-IPO OPPORTUNITIES</span><span>ESOP LIQUIDITY</span><span>19+ YEARS OF MARKET EXPERIENCE</span></div></div></div>
       <header className="ww-header"><Logo /><nav className={menuOpen ? "nav-open" : ""}><a href="#market" onClick={() => setMenuOpen(false)}>Explore market</a><a href="#services" onClick={() => setMenuOpen(false)}>Services</a><a href="#process" onClick={() => setMenuOpen(false)}>How it works</a><a href="#research" onClick={() => setMenuOpen(false)}>Research</a><a className="header-cta" href="#market" onClick={() => setMenuOpen(false)}>Browse opportunities <ArrowUpRight size={14} /></a></nav><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X size={20} /> : <Menu size={20} />}</button></header>
 
       <main>
