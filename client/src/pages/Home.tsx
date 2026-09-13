@@ -1,164 +1,58 @@
 import { useState } from "react";
-import {
-  ArrowUpRight,
-  BarChart3,
-  ChevronDown,
-  CircleArrowOutUpRight,
-  Menu,
-  ShieldCheck,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, ChevronRight, Menu, MoveUpRight, Play, Sparkles, TrendingUp, X } from "lucide-react";
 
-const marketRows = [
-  { name: "HDFC Securities", type: "Pre-IPO", sector: "Financial Services", price: "₹ 7,800", move: "+12.4%", positive: true },
-  { name: "Tata Capital", type: "Pre-IPO", sector: "Financial Services", price: "₹ 1,100", move: "+8.7%", positive: true },
-  { name: "Studds Accessories", type: "Unlisted", sector: "Consumer", price: "₹ 680", move: "+6.2%", positive: true },
-  { name: "Bira 91", type: "Unlisted", sector: "F&B", price: "₹ 250", move: "−2.1%", positive: false },
+const names = [
+  ["TATA CAPITAL", "PRE-IPO", "₹1,100", "+8.7%"],
+  ["HDFC SECURITIES", "PRE-IPO", "₹7,800", "+12.4%"],
+  ["STUDDS", "UNLISTED", "₹680", "+6.2%"],
+  ["BIRA 91", "UNLISTED", "₹250", "−2.1%"],
 ];
 
-const offerings = [
-  { number: "01", title: "Pre-IPO access", copy: "Get closer to the companies shaping tomorrow, before they reach the public market.", icon: Sparkles },
-  { number: "02", title: "Unlisted shares", copy: "Explore a curated universe of private companies across India's most dynamic sectors.", icon: BarChart3 },
-  { number: "03", title: "Delisted & ESOPs", copy: "Navigate complex off-market opportunities with a team that knows the mechanics inside out.", icon: ShieldCheck },
-];
+const tabs = ["Featured", "Pre-IPO", "Unlisted", "ESOPs"];
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("All opportunities");
-
-  const closeMenu = () => setMenuOpen(false);
-
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("Featured");
   return (
-    <div className="min-h-screen overflow-hidden bg-ink text-ivory selection:bg-lime selection:text-ink">
-      <div className="ticker-bar">
-        <div className="ticker-track">
-          <span>PRIVATE MARKET INTELLIGENCE</span><span className="ticker-dot">✳</span><span>INDIA'S GROWTH STORY</span><span className="ticker-dot">✳</span><span>ACCESS BEYOND THE INDEX</span><span className="ticker-dot">✳</span><span>PRIVATE MARKET INTELLIGENCE</span><span className="ticker-dot">✳</span><span>INDIA'S GROWTH STORY</span>
-        </div>
-      </div>
-
-      <header className="site-header">
-        <a href="#top" className="brand-lockup" aria-label="Wealth Wisdom India home" onClick={closeMenu}>
-          <span className="brand-symbol"><span /><span /><span /></span>
-          <span className="brand-name">WEALTH<br /><em>WISDOM</em></span>
-        </a>
-        <nav className={`desktop-nav ${menuOpen ? "is-open" : ""}`}>
-          <a href="#opportunities" onClick={closeMenu}>Opportunities</a>
-          <a href="#approach" onClick={closeMenu}>Our approach</a>
-          <a href="#market" onClick={closeMenu}>Market pulse</a>
-          <a href="#about" onClick={closeMenu}>About WWIPL</a>
-          <a className="nav-cta" href="mailto:care@wwipl.com" onClick={closeMenu}>Talk to us <ArrowUpRight size={15} /></a>
+    <div className="ww-page">
+      <div className="top-rail"><div className="rail-inner"><span>WWIPL PRIVATE MARKET INDEX <b>+14.82%</b></span><span>PRE-IPO ACCESS <i>NOW OPEN</i></span><span>INDIA'S NEXT 100 COMPANIES</span><span>WWIPL PRIVATE MARKET INDEX <b>+14.82%</b></span><span>PRE-IPO ACCESS <i>NOW OPEN</i></span></div></div>
+      <header className="ww-header">
+        <a className="ww-logo" href="#home"><span className="logo-mark"><i /><i /><i /><i /></span><span><strong>WEALTH</strong><em>WISDOM</em><small>INDIA</small></span></a>
+        <nav className={open ? "nav-open" : ""}>
+          <a href="#market" onClick={() => setOpen(false)}>Market</a><a href="#access" onClick={() => setOpen(false)}>Access</a><a href="#method" onClick={() => setOpen(false)}>Our edge</a><a href="#insights" onClick={() => setOpen(false)}>Insights</a><a className="header-cta" href="mailto:care@wwipl.com" onClick={() => setOpen(false)}>Start a conversation <ArrowUpRight size={14} /></a>
         </nav>
-        <button className="mobile-menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen((value) => !value)}>
-          {menuOpen ? <X size={21} /> : <Menu size={21} />}
-        </button>
+        <button className="menu-button" onClick={() => setOpen(!open)} aria-label="Menu">{open ? <X size={20} /> : <Menu size={20} />}</button>
       </header>
 
-      <main id="top">
-        <section className="hero-section">
-          <div className="hero-image" aria-hidden="true" />
-          <div className="hero-vignette" aria-hidden="true" />
-          <div className="hero-grid" aria-hidden="true" />
-          <div className="hero-content page-shell">
-            <div className="hero-kicker"><span className="eyebrow-line" /> 19 YEARS IN THE MAKING</div>
-            <h1>See the<br /><span>unlisted</span><br />differently<span className="hero-period">.</span></h1>
-            <p className="hero-copy">The private market is where tomorrow's most important companies begin. We help you find your place in the story—early, informed, and with confidence.</p>
-            <div className="hero-actions">
-              <a className="button button-lime" href="#opportunities">Explore opportunities <ArrowUpRight size={17} /></a>
-              <a className="text-link" href="#approach">How we work <span>↘</span></a>
-            </div>
+      <main id="home">
+        <section className="command-hero">
+          <div className="hero-scanlines" />
+          <div className="hero-chart"><svg viewBox="0 0 800 420" preserveAspectRatio="none"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#bcff2c" stopOpacity=".22" /><stop offset="1" stopColor="#bcff2c" stopOpacity="0" /></linearGradient></defs><path className="chart-fill" d="M0 370 L55 342 L90 355 L130 294 L172 305 L220 250 L265 279 L305 220 L346 239 L386 186 L430 215 L462 174 L505 190 L548 122 L590 143 L630 93 L671 112 L720 46 L800 15 L800 420 L0 420Z" /><path className="chart-path" d="M0 370 L55 342 L90 355 L130 294 L172 305 L220 250 L265 279 L305 220 L346 239 L386 186 L430 215 L462 174 L505 190 L548 122 L590 143 L630 93 L671 112 L720 46 L800 15" /></svg><div className="axis-labels"><span>Q1 2023</span><span>Q4 2023</span><span>Q2 2024</span><span>Q4 2024</span><span>NOW</span></div></div>
+          <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
+          <div className="hero-content">
+            <div className="hero-eyebrow"><span className="pulse-dot" /> PRIVATE MARKETS / INDIA <span>↗ LIVE INTELLIGENCE</span></div>
+            <h1>Own the<br /><em>before.</em></h1>
+            <p>Access the companies building India's next decade—before the market puts a price on the story.</p>
+            <div className="hero-actions"><a className="primary-cta" href="#access">Explore private markets <ArrowUpRight size={16} /></a><a className="play-link" href="#method"><span><Play size={11} fill="currentColor" /></span> How WWIPL works</a></div>
+            <div className="hero-proof"><span><strong>19+</strong> years in the market</span><span><strong>500+</strong> private opportunities</span><span><strong>01</strong> serious partner</span></div>
           </div>
-          <div className="hero-side-note">WEALTH WISDOM INDIA PVT. LTD. <span>•</span> EST. 2007</div>
-          <div className="hero-bottom page-shell">
-            <div className="hero-scroll"><span className="scroll-line" /> Scroll to explore</div>
-            <div className="hero-index">01 <span>/</span> 04</div>
-          </div>
+          <div className="hero-terminal terminal-main"><div className="terminal-top"><span><i /> MARKET PULSE</span><small>09:41:28 IST</small></div><div className="terminal-number">+14.82% <TrendingUp size={18} /></div><div className="terminal-sub">WWIPL PRIVATE MARKET INDEX <span>● LIVE</span></div><div className="mini-bars"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div></div>
+          <div className="hero-terminal terminal-float"><span className="terminal-tag">UPCOMING LISTING</span><strong>TATA CAPITAL</strong><small>PRE-IPO / FINANCIAL SERVICES</small><div><b>₹ 1,100</b><em>+8.7%</em></div></div>
+          <div className="hero-side-label">WISDOM IS SEEING<br />THE SIGNAL EARLY</div>
+          <div className="hero-scroll">SCROLL TO DISCOVER <span>↓</span></div>
         </section>
 
-        <section className="intro-section page-shell" id="about">
-          <div className="section-label"><span>01</span><span className="label-rule" /> THE LONG VIEW</div>
-          <div className="intro-grid">
-            <h2>Every great<br />company starts<br /><em>unlisted.</em></h2>
-            <div className="intro-body">
-              <p className="large-copy">Most investors meet a company after the story is already being told. WWIPL helps you look earlier—at the businesses, founders, and ideas that are still becoming.</p>
-              <div className="stat-row">
-                <div className="stat-item"><strong>19<span>+</span></strong><span>years of market<br />experience</span></div>
-                <div className="stat-item"><strong>500<span>+</span></strong><span>private market<br />opportunities</span></div>
-                <div className="stat-item"><strong>01</strong><span>trusted partner<br />through the journey</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <section className="thesis-section" id="access"><div className="section-wrap"><div className="section-kicker"><span>01</span> THE INVESTMENT THESIS</div><div className="thesis-grid"><h2>The most<br />interesting<br /><em>companies</em><br />are still private.</h2><div className="thesis-copy"><p>By the time a company reaches the public market, the easy part of the story is often over. WWIPL gives you a considered way into the part that comes before.</p><a className="arrow-link" href="#method">Why private markets, now <ArrowUpRight size={16} /></a><div className="signal-line"><span>INDIA'S PRIVATE MARKET</span><b /><i>GROWTH STORY ↗</i></div></div></div></div></section>
 
-        <section className="opportunities-section" id="opportunities">
-          <div className="page-shell">
-            <div className="section-label light"><span>02</span><span className="label-rule" /> WHERE POSSIBILITY LIVES</div>
-            <div className="section-heading-row">
-              <h2>Find the<br /><em>next chapter.</em></h2>
-              <p>We make the private market easier to navigate—so you can spend less time decoding the mechanics and more time understanding the opportunity.</p>
-            </div>
-            <div className="offering-grid">
-              {offerings.map(({ number, title, copy, icon: Icon }) => (
-                <a className="offering-card" href="#contact" key={number}>
-                  <div className="card-top"><span>{number}</span><Icon size={25} strokeWidth={1.25} /></div>
-                  <div><h3>{title}</h3><p>{copy}</p></div>
-                  <div className="card-arrow"><CircleArrowOutUpRight size={20} /></div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section className="access-section"><div className="section-wrap"><div className="section-kicker pale"><span>02</span> ACCESS, WITHOUT THE NOISE</div><div className="access-head"><h2>Choose your<br /><em>position.</em></h2><p>Curated access to the opportunities that don't show up on a standard brokerage screen.</p></div><div className="access-cards"><article className="access-card card-lime"><div className="card-code">A / 01</div><Sparkles size={24} /><h3>Pre-IPO</h3><p>Get in before a public listing changes the conversation.</p><a href="#market">Explore pre-IPO <ChevronRight size={16} /></a></article><article className="access-card card-blue"><div className="card-code">B / 02</div><div className="card-graph"><span /><span /><span /><span /><span /><span /></div><h3>Unlisted</h3><p>Build exposure to India's private-company ecosystem.</p><a href="#market">Browse unlisted <ChevronRight size={16} /></a></article><article className="access-card card-cream"><div className="card-code">C / 03</div><div className="orbit-small" /><h3>ESOPs & exits</h3><p>Navigate the mechanics of employee shares and secondary deals.</p><a href="#market">See the landscape <ChevronRight size={16} /></a></article></div></div></section>
 
-        <section className="market-section page-shell" id="market">
-          <div className="section-label"><span>03</span><span className="label-rule" /> MARKET PULSE</div>
-          <div className="market-head">
-            <div><h2>A signal,<br /><em>not noise.</em></h2><p>Selected names from the private market. For perspective, not prediction.</p></div>
-            <a className="text-link dark-link" href="https://wwipl.com/unlisted-share" target="_blank" rel="noreferrer">View all listings <ArrowUpRight size={16} /></a>
-          </div>
-          <div className="market-tabs" role="tablist" aria-label="Market filters">
-            {["All opportunities", "Pre-IPO", "Unlisted"].map((tab) => <button className={activeTab === tab ? "active" : ""} onClick={() => setActiveTab(tab)} key={tab}>{tab}</button>)}
-          </div>
-          <div className="market-table-wrap">
-            <div className="market-table market-table-head"><span>Company</span><span>Category</span><span>Sector</span><span>Indicative price</span><span>Signal</span></div>
-            {marketRows.filter((row) => activeTab === "All opportunities" || row.type === activeTab.replace("-", "-")).map((row) => (
-              <div className="market-table market-row" key={row.name}>
-                <strong>{row.name}</strong><span className="pill">{row.type}</span><span>{row.sector}</span><span>{row.price}</span><span className={row.positive ? "positive" : "negative"}>{row.move}</span>
-              </div>
-            ))}
-          </div>
-          <p className="table-note">Indicative prices only. Private market investments carry risk and may not be suitable for all investors.</p>
-        </section>
+        <section className="market-section" id="market"><div className="section-wrap"><div className="section-kicker"><span>03</span> THE PRIVATE MARKET SCREEN</div><div className="market-title-row"><div><h2>Names worth<br /><em>knowing.</em></h2><p>Selected opportunities from the WWIPL universe. Not a recommendation—an informed starting point.</p></div><a className="arrow-link" href="https://wwipl.com/unlisted-share" target="_blank" rel="noreferrer">View full market <ArrowUpRight size={16} /></a></div><div className="market-tabs">{tabs.map(tab => <button className={active === tab ? "active" : ""} onClick={() => setActive(tab)} key={tab}>{tab}</button>)}</div><div className="market-list"><div className="market-list-head"><span>Company</span><span>Type</span><span>Indicative price</span><span>Signal</span></div>{names.map((row, index) => <div className="market-list-row" key={row[0]}><span className="company-name"><b>0{index + 1}</b>{row[0]}</span><span className="type-chip">{row[1]}</span><span>{row[2]}</span><span className={row[3].includes("−") ? "down" : "up"}>{row[3]}</span><MoveUpRight size={16} /></div>)}</div></div></section>
 
-        <section className="approach-section" id="approach">
-          <div className="page-shell">
-            <div className="section-label"><span>04</span><span className="label-rule" /> THE WWIPL APPROACH</div>
-            <div className="approach-layout">
-              <div className="approach-heading"><h2>Clarity is<br />an <em>edge.</em></h2><p>Access is only the beginning. Our role is to bring structure, context, and care to every decision.</p></div>
-              <div className="steps">
-                <div className="step"><span>01</span><div><h3>Discover</h3><p>Understand the landscape through research, data, and conversations that go beyond the headline.</p></div></div>
-                <div className="step"><span>02</span><div><h3>Decide</h3><p>Get a clear view of the opportunity, the mechanics, and the risks—before you make a move.</p></div></div>
-                <div className="step"><span>03</span><div><h3>Stay the course</h3><p>Build with a partner who remains present from first enquiry through the full investment journey.</p></div></div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <section className="method-section" id="method"><div className="section-wrap"><div className="section-kicker pale"><span>04</span> THE WWIPL EDGE</div><div className="method-grid"><div><h2>Not just<br /><em>access.</em><br />judgement.</h2><p>We bring more than a list of names. We bring the context to know what deserves your attention—and what doesn't.</p></div><div className="method-steps"><div><span>01</span><h3>See clearly</h3><p>Research, company intelligence, and a lens on the signals beneath the noise.</p></div><div><span>02</span><h3>Move with intent</h3><p>Simple mechanics, direct guidance, and a partner who respects the decision.</p></div><div><span>03</span><h3>Stay informed</h3><p>Because a long-term view is built through conversation, not a one-time transaction.</p></div></div></div></div></section>
 
-        <section className="contact-section page-shell" id="contact">
-          <div className="contact-card">
-            <div className="contact-orbit" aria-hidden="true"><span /><span /><span /></div>
-            <div className="section-label light"><span>05</span><span className="label-rule" /> START A CONVERSATION</div>
-            <h2>Don't follow<br />the crowd.<br /><em>Find the signal.</em></h2>
-            <p>Tell us what you're looking for. We'll help you see what's possible.</p>
-            <a className="button button-lime" href="mailto:care@wwipl.com">Connect with WWIPL <ArrowUpRight size={17} /></a>
-          </div>
-        </section>
+        <section className="final-section" id="insights"><div className="final-grid"><div className="final-copy"><div className="section-kicker pale"><span>05</span> THE NEXT MOVE</div><h2>See what the<br /><em>market misses.</em></h2><p>Whether you're building a portfolio or looking for liquidity, start with a sharper conversation.</p><a className="primary-cta" href="mailto:care@wwipl.com">Talk to WWIPL <ArrowUpRight size={16} /></a></div><div className="final-data"><div className="data-title"><span>WWIPL / RESEARCH DESK</span><small>FIELD NOTE 041</small></div><div className="data-quote">“The opportunity is<br />usually hiding in<br /><em>plain sight.</em>”</div><div className="data-footer"><span>INDIA / 2026</span><span>↗ READ THE LATEST</span></div></div></div></section>
       </main>
-
-      <footer className="site-footer page-shell">
-        <div className="footer-brand"><span className="brand-symbol"><span /><span /><span /></span><span className="brand-name">WEALTH<br /><em>WISDOM</em></span></div>
-        <div className="footer-meta"><span>© 2026 Wealth Wisdom India Pvt. Ltd.</span><span>Made for the long view.</span></div>
-        <div className="footer-links"><a href="https://wwipl.com/term-n-condition" target="_blank" rel="noreferrer">Terms</a><a href="https://wwipl.com/privacy-policy" target="_blank" rel="noreferrer">Privacy</a><a href="https://www.linkedin.com/company/wealthwisdomindia2/" target="_blank" rel="noreferrer">LinkedIn</a></div>
-      </footer>
+      <footer className="ww-footer"><a className="ww-logo" href="#home"><span className="logo-mark"><i /><i /><i /><i /></span><span><strong>WEALTH</strong><em>WISDOM</em><small>INDIA</small></span></a><span>© 2026 WEALTH WISDOM INDIA PVT. LTD.</span><div><a href="https://wwipl.com/privacy-policy">Privacy</a><a href="https://wwipl.com/term-n-condition">Terms</a><a href="https://www.linkedin.com/company/wealthwisdomindia2/">LinkedIn</a></div></footer>
     </div>
   );
 }
