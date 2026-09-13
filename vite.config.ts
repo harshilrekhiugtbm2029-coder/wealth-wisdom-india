@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), jsxLocPlugin()],
+  base: process.env.GITHUB_ACTIONS ? "/wealth-wisdom-india/" : "/",
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
